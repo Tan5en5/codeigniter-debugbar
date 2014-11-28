@@ -160,7 +160,7 @@ class CI_Profiler
      */
     protected function _compile_messages()
     {
-        if (!class_exists('Console')) {
+        if ( ! isset($this->CI->console)) {
             return;
         }
 
@@ -179,7 +179,7 @@ class CI_Profiler
      */
     protected function _compile_exceptions()
     {
-        if (!class_exists('Console')) {
+        if ( ! isset($this->CI->console)) {
             return;
         }
 
@@ -332,15 +332,14 @@ class CI_Profiler
         }
 
         // Add request data collector
-        if (class_exists('requestDataCollector')) {
+        if (isset($this->CI->requestDataCollector)) {
             $this->debugbar->addCollector($this->CI->requestDataCollector);
         }
 
         $debugbarRenderer = $this->debugbar->getJavascriptRenderer();
         $debugbarRenderer->setOptions($this->config);
-        $head_src = $this->CI->load->get_var('head_src');
         $sources = array(
-            $head_src,
+            $this->CI->load->get_var('head_src'),
             $debugbarRenderer->renderHead()
         );
         $this->CI->load->vars(array(
