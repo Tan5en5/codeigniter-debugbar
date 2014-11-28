@@ -28,11 +28,11 @@ Then, just enable the profiler like normal.
 
     $this->output->enable_profiler(true);
 
-*NOTE* : Make sure to put **$head_src** variable (it adds javascript and css files) in your html template header.
+**NOTE** : Make sure to put *$head_src* variable (it adds javascript and css files) in your html template header.
 
-*NOTE 2* : If there is a profiler configuration file in your application config directory delete it or it won't work.
+**NOTE 2** : If there is a profiler configuration file in your application config directory delete it or it won't work.
 
-*NOTE 3* : Make sur the **$config['base_url']** directory is readable.
+**NOTE 3** : Make sur the *$config['base_url']* directory is readable.
 
 ## Configuration
 
