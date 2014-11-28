@@ -2,13 +2,12 @@
 /**
  * CodeIgniter Debug Bar
  *
- * @package		CodeIgniter PHP Debug Bar
- * @author		Anthony Tansens <atansens@gac-technology.com>
+ * @package     CodeIgniterDebugBar
+ * @author      Anthony Tansens <atansens@gac-technology.com>
  * @license     http://opensource.org/licenses/MIT MIT
- * @link		http://www.gac-technology.com
- * @since		Version 1.0
+ * @since       Version 1.0
  * @filesource
- */ 
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
@@ -17,10 +16,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * This class enables you to display benchmark, query, and other data
  * in order to help with debugging and optimization using PHP Debug Bar.
  *
- * @package		CodeIgniter Debug Bar
- * @subpackage	Libraries
- * @category	Libraries
- * @author		Anthony Tansens <atansens@gac-technology.com>
+ * @package     CodeIgniterDebugBar
+ * @subpackage  Libraries
+ * @category    Libraries
+ * @author      Anthony Tansens <atansens@gac-technology.com>
  */
 
 use DebugBar\DebugBar;

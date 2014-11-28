@@ -1,14 +1,13 @@
 <?php
 /**
- * CodeIgniter PHP Debug Bar
+ * CodeIgniter Debug Bar
  *
- * @package		CodeIgniter PHP Debug Bar
- * @author		Anthony Tansens <atansens@gac-technology.com>
+ * @package     CodeIgniterDebugBar
+ * @author      Anthony Tansens <atansens@gac-technology.com>
  * @license     http://opensource.org/licenses/MIT MIT
- * @link		http://www.gac-technology.com
- * @since		Version 1.0
+ * @since       Version 1.0
  * @filesource
- */ 
+ */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 use DebugBar\DataCollector\DataCollector;
@@ -16,11 +15,11 @@ use DebugBar\DataCollector\DataCollectorInterface;
 use DebugBar\DataCollector\Renderable;
 
 /**
- * Description of SessionCollector
+ * SessionCollector Class
  *
- * @package		CodeIgniter PHP Debug Bar
- * @subpackage	Libraries
- * @category	Collectors
+ * @package     CodeIgniterDebugBar
+ * @subpackage  Libraries
+ * @category    Collectors
  * @author      Anthony Tansens <atansens@gac-technology.com>
  */
 class SessionCollector extends DataCollector implements DataCollectorInterface, Renderable

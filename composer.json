@@ -1,0 +1,25 @@
+{
+    "name": "Tan5en5/codeigniter-debugbar",
+    "description": "CodeIgniter Debug Bar using PHP Debug Bar.",
+    "license": "MIT",
+    "keywords": [
+        "codeigniter", "profiler", "debug"
+    ],
+    "authors": [
+        {
+            "name": "Anthony Tansens",
+            "email": "atansens@gac-technology.com",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "http://tan5en5.github.io/codeigniter-debugbar/",
+    "support": {
+        "issues": "http://tan5en5.github.io/codeigniter-debugbar/issues",
+        "source": "http://tan5en5.github.io/codeigniter-debugbar/"
+    },
+    "type": "codeigniter-third-party",
+    "require": {
+        "compwright/codeigniter-installers": "*",
+        "maximebf/debugbar": ">=1.0.0"
+    }
+}
