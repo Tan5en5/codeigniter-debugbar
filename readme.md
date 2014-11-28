@@ -1,3 +1,7 @@
+## Requirements
+
+- CodeIgniter 3.x
+
 ## Installation
 
 Add to your `composer.json` file or create file in your application's root. Add the following text in the new file: 
