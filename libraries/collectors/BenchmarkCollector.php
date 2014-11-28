@@ -31,19 +31,19 @@ class BenchmarkCollector extends TimeDataCollector
     {
         $markers = array();
 
-		foreach ($benchmark->marker as $key => $val) {
-			// We match the "end" marker so that the list ends
-			// up in the order that it was defined
-			if (preg_match('/(.+?)_end$/i', $key, $match)
-				&& isset($benchmark->marker[$match[1].'_end'], $benchmark->marker[$match[1].'_start'])
+        foreach ($benchmark->marker as $key => $val) {
+            // We match the "end" marker so that the list ends
+            // up in the order that it was defined
+            if (preg_match('/(.+?)_end$/i', $key, $match)
+                && isset($benchmark->marker[$match[1].'_end'], $benchmark->marker[$match[1].'_start'])
                 && $match[1] !== 'total_execution_time'
             ) {
-				$markers[$match[1]] = array(
+                $markers[$match[1]] = array(
                     'start' => $benchmark->marker[$match[1].'_start'], 
                     'end' => $benchmark->marker[$key]
                 );
-			}
-		}
+            }
+        }
 
         foreach ($markers as $label => $marker) {
             $this->addMeasure($label, $marker['start'], $marker['end']);

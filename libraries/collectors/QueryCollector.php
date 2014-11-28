@@ -35,8 +35,8 @@ class QueryCollector extends DataCollector implements DataCollectorInterface, Re
     public function setDbs(CI_Controller $ci)
     {
         // Let's determine which databases are currently connected to
-		foreach (get_object_vars($ci) as $name => $cobject) {
-			if (is_object($cobject) && $cobject instanceof CI_DB) {
+        foreach (get_object_vars($ci) as $name => $cobject) {
+            if (is_object($cobject) && $cobject instanceof CI_DB) {
                 $this->dbs[get_class($ci).':$'.$name] = $cobject;
             } elseif (is_object($cobject) && $cobject instanceof CI_Model) {
                 foreach (get_object_vars($cobject) as $mname => $mobject) {
@@ -44,8 +44,8 @@ class QueryCollector extends DataCollector implements DataCollectorInterface, Re
                         $this->dbs[get_class($cobject).':$'.$mname] = $mobject;
                     }
                 }
-			}
-		}
+            }
+        }
     }
 
     public function collect()
