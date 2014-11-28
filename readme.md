@@ -28,6 +28,16 @@ Then, just enable the profiler like normal.
 
     $this->output->enable_profiler(true);
 
+*NOTE* : Make sure to put **$head_src** variable (it adds javascript and css files) in your html template header.
+
+*NOTE 2* : If there is a profiler configuration file in your application config directory delete it or it won't work.
+
+*NOTE 3* : Make sur the **$config['base_url']** directory is readable.
+
+## Configuration
+
+You can configure PHP Debug Bar directly into the profiler configuration file, read [PHP Debug Bar documentation](http://phpdebugbar.com/docs/rendering.html#rendering) for more information.
+
 ## License
 
 [MIT licence](http://opensource.org/licenses/MIT)
