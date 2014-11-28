@@ -160,6 +160,10 @@ class CI_Profiler
 	 */
     protected function _compile_messages()
     {
+        if (!class_exists('Console')) {
+            return;
+        }
+
         $this->debugbar->addCollector(new MessagesCollector());
         $logs = $this->CI->console->getMessages();
 
@@ -175,6 +179,10 @@ class CI_Profiler
 	 */
     protected function _compile_exceptions()
     {
+        if (!class_exists('Console')) {
+            return;
+        }
+
         $this->debugbar->addCollector(new ExceptionsCollector());
         $logs = $this->CI->console->getExeptions();
 
