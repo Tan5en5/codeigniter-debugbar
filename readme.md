@@ -17,7 +17,7 @@ In your application, you will first need to load the newly installed package.  T
 ```php
 $autoload['packages'] = array(APPPATH.'third_party/codeigniter-debugbar');
 ```
-If you want to log messages and exceptions you can also put in the autoloader the console library
+If you want to log messages and exceptions you can also load console library
 ```php
 $autoload['libraries'] = array('console');
 ```
@@ -29,17 +29,29 @@ $this->console->info('Info message');
 $this->console->warning('Warning message');
 $this->console->notice('Error message');
 ```
-Then, just enable the profiler like normal.
+Then, enable the profiler like normal.
 ```php
 $this->output->enable_profiler(true);
 ```
-**NOTE** : Make sure to put `$head_src` variable (it adds javascript and css files) in your html template head tag.
 
-**NOTE 2** : If there is a profiler configuration file in your application config directory delete it or it won't work.
+To complete the installation, make sure to put `$head_src` variable (it adds javascript and css files) in your html template head tag.
 
-**NOTE 3** : Make sur the `$config['base_url']` directory is readable.
+By default the resources are located in the `/assets/php-debugbar` directory, if you want to change that, just edit `$config['base_url']` from `./config/profiler.php`.
+
+**Important** : If there is a profiler configuration file in your application config directory delete it or CodeIgniter will not load our configuration file.
 
 ## Configuration
+
+Configuration file is located in `./config/profiler.php`.
+
+To configure the profiler, read [CodeIgniter's profiler documentation](http://www.codeigniter.com/userguide3/general/profiling.html).
+
+CodeIgniter Debug Bar adds 4 new sections :
+
+- PHP infos : Display information about PHP version.
+- CodeIgniter infos : Display informations about CodeIgniter (version, environment and locale).
+- Messages : Display messages (Console library must be loaded).
+- Exceptions : Display exceptions (Console library must be loaded).
 
 You can configure PHP Debug Bar directly into the profiler configuration file, read [PHP Debug Bar documentation](http://phpdebugbar.com/docs/rendering.html#rendering) for more information.
 
