@@ -139,7 +139,6 @@ class CI_Profiler
     protected function _compile_codeigniter_info()
     {
         $this->CI->load->library('collectors/CodeIgniterCollector', null, 'codeIgniterCollector');
-        $this->CI->codeIgniterCollector->setCI($this->CI);
         $this->debugbar->addCollector($this->CI->codeIgniterCollector);
     }
 
@@ -227,8 +226,8 @@ class CI_Profiler
      */
     protected function _compile_get()
     {
-        $this->CI->load->library('collectors/RequestDataCollector', null, 'requestDataCollector');
-        $this->CI->requestDataCollector->setGlobal('get');
+        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
+        $this->CI->codeIgniterRequestCollector->setRequestData($this->CI->input, 'get');
     }
 
     /**
@@ -238,8 +237,8 @@ class CI_Profiler
      */
     protected function _compile_post()
     {
-        $this->CI->load->library('collectors/RequestDataCollector', null, 'requestDataCollector');
-        $this->CI->requestDataCollector->setGlobal('post');
+        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
+        $this->CI->codeIgniterRequestCollector->setRequestData($this->CI->input, 'post');
     }
 
     /**
@@ -249,8 +248,8 @@ class CI_Profiler
      */
     protected function _compile_uri_string()
     {
-        $this->CI->load->library('collectors/RequestDataCollector', null, 'requestDataCollector');
-        $this->CI->requestDataCollector->setAdditionalInfos($this->CI->lang->line('profiler_uri_string'), $this->CI->uri->uri_string);
+        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
+        $this->CI->codeIgniterRequestCollector->setAdditionalData($this->CI->lang->line('profiler_uri_string'), $this->CI->uri->uri_string);
     }
 
     /**
@@ -260,8 +259,8 @@ class CI_Profiler
      */
     protected function _compile_controller_info()
     {
-        $this->CI->load->library('collectors/RequestDataCollector', null, 'requestDataCollector');
-        $this->CI->requestDataCollector->setAdditionalInfos($this->CI->lang->line('profiler_controller_info'), $this->CI->router->class.'/'.$this->CI->router->method);
+        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
+        $this->CI->codeIgniterRequestCollector->setAdditionalData($this->CI->lang->line('profiler_controller_info'), $this->CI->router->class.'/'.$this->CI->router->method);
     }
 
     /**
@@ -285,8 +284,8 @@ class CI_Profiler
      */
     protected function _compile_http_headers()
     {
-        $this->CI->load->library('collectors/RequestDataCollector', null, 'requestDataCollector');
-        $this->CI->requestDataCollector->setGlobal('server');
+        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
+        $this->CI->codeIgniterRequestCollector->setRequestData($this->CI->input, 'server');
     }
 
     /**
@@ -318,6 +317,24 @@ class CI_Profiler
     }
 
     /**
+     * 
+     * @return string
+     */
+    protected function render()
+    {
+        $debugbarRenderer = $this->debugbar->getJavascriptRenderer();
+        $debugbarRenderer->setOptions($this->config);
+
+        ob_start();
+        $debugbarRenderer->dumpCssAssets();
+        $css_assets = '<style type="text/css">'."\n".ob_get_clean().'</style>'."\n";
+        $debugbarRenderer->dumpJsAssets();
+        $js_assets = '<script type="text/javascript">'."\n".ob_get_clean().'</script>'."\n";
+
+        return $css_assets.$js_assets.$debugbarRenderer->render();
+    }
+
+    /**
      * Run the Profiler
      *
      * @return string
@@ -336,20 +353,7 @@ class CI_Profiler
             $this->debugbar->addCollector($this->CI->requestDataCollector);
         }
 
-        $debugbarRenderer = $this->debugbar->getJavascriptRenderer();
-        $debugbarRenderer->setOptions($this->config);
-        $sources = array(
-            $this->CI->load->get_var('head_src'),
-            $debugbarRenderer->renderHead()
-        );
-        $this->CI->load->vars(array(
-            'head_src' => implode("\n", $sources),
-        ));
-
-        return $debugbarRenderer->render();
+        return $this->render();
     }
 
 }
-
-/* End of file Profiler.php */
-/* Location: ./codeigniter-debugbar/libraries/Profiler.php */

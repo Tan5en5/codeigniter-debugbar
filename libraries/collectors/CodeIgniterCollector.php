@@ -23,28 +23,12 @@ use DebugBar\DataCollector\Renderable;
  */
 class CodeIgniterCollector extends DataCollector implements Renderable
 {
-    /** 
-     * CodeIgniter instance
-     * 
-     * @var CI_Controller $CI 
-     */
-    protected $CI;
-
-    /**
-     * 
-     * @param CI_Controller $CI
-     */
-    public function setCI(CI_Controller $CI = null)
-    {
-        $this->CI = $CI;
-    }
-
     public function collect()
     {
         return array(
-            "version" => CI_VERSION,
-            "environment" => ENVIRONMENT,
-            "locale" => $this->CI->config->item('language'),
+            "version"       => CI_VERSION,
+            "environment"   => ENVIRONMENT,
+            "locale"        => config_item('language'),
         );
     }
 
@@ -77,6 +61,3 @@ class CodeIgniterCollector extends DataCollector implements Renderable
         );
     }
 }
-
-/* End of file CodeIgniterCollector.php */
-/* Location: ./codeigniter-debugbar/librairies/collectors/CodeIgniterCollector.php */

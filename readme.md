@@ -1,7 +1,7 @@
 ## Requirements
 
 - PHP 5.3.2+ (Composer requirement)
-- CodeIgniter 3.x
+- CodeIgniter 3.0.x
 
 ## Installation
 
@@ -13,7 +13,11 @@ Create `composer.json` file in your application's root if there is none. Add the
     }
 }
 ```
-In your application, you will first need to load the newly installed package.  This is  done easily through the autoloader, but could also be done in your controller with an environment check for maximum optimization. 
+Enable Composer (locate in `config/config.php`) :
+```php
+$config['composer_autoload'] = FCPATH.DIRECTORY_SEPARATOR.'vendor/autoload.php';
+```
+In your application, you will first need to load the newly installed package. This is  done easily through the autoloader, but could also be done in your controller with an environment check for maximum optimization. 
 ```php
 $autoload['packages'] = array(APPPATH.'third_party/codeigniter-debugbar');
 ```
@@ -27,22 +31,26 @@ $this->console->exception(new Exception('test exception'));
 $this->console->debug('Debug message');
 $this->console->info('Info message');
 $this->console->warning('Warning message');
-$this->console->notice('Error message');
+$this->console->error('Error message');
 ```
 Then, enable the profiler like normal.
 ```php
 $this->output->enable_profiler(true);
 ```
 
-To complete the installation, make sure to put `$head_src` variable (it adds javascript and css files) in your html template head tag.
-
-By default the resources are located in the `/assets/php-debugbar` directory, if you want to change that, just edit `$config['base_url']` from `./config/profiler.php`.
+To complete the installation, add the following header tag :
+```html
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/github.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+```
 
 **Important** : If there is a profiler configuration file in your application config directory delete it or CodeIgniter will not load our configuration file.
 
 ## Configuration
 
-Configuration file is located in `./config/profiler.php`.
+Configuration file is located in `./third_party/codeigniter-debugbar/config/profiler.php`.
 
 To configure the profiler, read [CodeIgniter's profiler documentation](http://www.codeigniter.com/userguide3/general/profiling.html).
 
@@ -57,4 +65,24 @@ You can configure PHP Debug Bar directly into the profiler configuration file, r
 
 ## License
 
-[MIT licence](http://opensource.org/licenses/MIT)
+The MIT License (MIT)
+
+Copyright (c) 2015 Anthony Tansens
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.

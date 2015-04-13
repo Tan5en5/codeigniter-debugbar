@@ -80,6 +80,3 @@ class Console extends AbstractLogger
         );
     }
 }
-
-/* End of file Console.php */
-/* Location: ./codeigniter-debugbar/librairies/Console.php */

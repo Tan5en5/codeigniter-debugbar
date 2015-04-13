@@ -102,6 +102,3 @@ class QueryCollector extends DataCollector implements DataCollectorInterface, Re
         );
     }
 }
-
-/* End of file QueryCollector.php */
-/* Location: ./codeigniter-debugbar/librairies/collectors/QueryCollector.php */

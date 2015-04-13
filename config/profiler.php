@@ -12,6 +12,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
+| Custom Profiler Sections
+| -------------------------------------------------------------------------
+| This file lets you determine whether or not various sections of Profiler
+| data are displayed when the Profiler is enabled.
+|
+*/
+
+$config['php_info']             = TRUE;
+$config['codeigniter_info']     = TRUE;
+$config['messages']             = TRUE;
+$config['exceptions']           = TRUE;
+
+/*
+| -------------------------------------------------------------------------
 | Profiler Sections
 | -------------------------------------------------------------------------
 | This file lets you determine whether or not various sections of Profiler
@@ -22,20 +36,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$config['php_info']             = true;
-$config['codeigniter_info']     = true;
-$config['messages']             = true;
-$config['exceptions']           = true;
-$config['benchmarks']           = true;
-$config['get']                  = true;
-$config['memory_usage']         = true;
-$config['post']                 = true;
-$config['uri_string']           = true;
-$config['controller_info']      = true;
-$config['queries']              = true;
-$config['http_headers']         = true;
-$config['session_data']         = true;
-$config['config']               = true;
+$config['benchmarks']           = TRUE;
+$config['config']               = TRUE;
+$config['controller_info']      = TRUE;
+$config['get']                  = TRUE;
+$config['http_headers']         = TRUE;
+$config['memory_usage']         = TRUE;
+$config['post']                 = TRUE;
+$config['queries']              = TRUE;
+$config['uri_string']           = TRUE;
+$config['session_data']         = TRUE;
 $config['query_toggle_count']   = 25;
 
 /*
@@ -65,9 +75,6 @@ $config['query_toggle_count']   = 25;
 |
 */
 
-$config['base_url']                     = get_instance()->config->base_url('assets/php-debugbar');
-$config['include_vendors']              = true;
-$config['enable_jquery_noconflict']     = false;
-
-/* End of file profiler.php */
-/* Location: ./codeigniter-debugbar/config/profiler.php */
+$config['base_url']                     = NULL;
+$config['include_vendors']              = FALSE;
+$config['enable_jquery_noconflict']     = FALSE;

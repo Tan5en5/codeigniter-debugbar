@@ -50,6 +50,3 @@ class BenchmarkCollector extends TimeDataCollector
         }
     }
 }
-
-/* End of file BenchmarkCollector.php */
-/* Location: ./codeigniter-debugbar/librairies/collectors/BenchmarkCollector.php */

@@ -73,6 +73,3 @@ class SessionCollector extends DataCollector implements DataCollectorInterface, 
         );
     }
 }
-
-/* End of file SessionCollector.php */
-/* Location: ./codeigniter-debugbar/librairies/collectors/SessionCollector.php */

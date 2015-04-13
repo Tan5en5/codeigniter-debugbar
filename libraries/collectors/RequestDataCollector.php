@@ -114,6 +114,3 @@ class RequestDataCollector extends DataCollector implements DataCollectorInterfa
         return $widgets;
     }
 }
-
-/* End of file RequestDataCollector.php */
-/* Location: ./codeigniter-debugbar/librairies/collectors/RequestDataCollector.php */
