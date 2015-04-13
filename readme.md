@@ -13,7 +13,7 @@ Create `composer.json` file in your application's root if there is none. Add the
     }
 }
 ```
-Enable Composer (locate in `config/config.php`) :
+Enable Composer (locate in `./config/config.php`) :
 ```php
 $config['composer_autoload'] = FCPATH.DIRECTORY_SEPARATOR.'vendor/autoload.php';
 ```
@@ -38,7 +38,7 @@ Then, enable the profiler like normal.
 $this->output->enable_profiler(true);
 ```
 
-To complete the installation, add the following header tag :
+To complete the installation, add the following header tags :
 ```html
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
