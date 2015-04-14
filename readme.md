@@ -15,7 +15,7 @@ Create `composer.json` file in your application's root if there is none. Add the
 ```
 Enable Composer (locate in `./config/config.php`) :
 ```php
-$config['composer_autoload'] = FCPATH.DIRECTORY_SEPARATOR.'vendor/autoload.php';
+$config['composer_autoload'] = FCPATH.'vendor/autoload.php';
 ```
 In your application, you will first need to load the newly installed package. This is  done easily through the autoloader, but could also be done in your controller with an environment check for maximum optimization. 
 ```php
