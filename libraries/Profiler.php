@@ -349,8 +349,8 @@ class CI_Profiler
         }
 
         // Add request data collector
-        if (isset($this->CI->requestDataCollector)) {
-            $this->debugbar->addCollector($this->CI->requestDataCollector);
+        if (isset($this->CI->codeIgniterRequestCollector)) {
+            $this->debugbar->addCollector($this->CI->codeIgniterRequestCollector);
         }
 
         return $this->render();
