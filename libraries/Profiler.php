@@ -326,12 +326,15 @@ class CI_Profiler
         $debugbarRenderer->setOptions($this->config);
 
         ob_start();
+        echo '<style type="text/css">'."\n";
         $debugbarRenderer->dumpCssAssets();
-        $css_assets = '<style type="text/css">'."\n".ob_get_clean().'</style>'."\n";
+        echo '</style>'."\n";
+        echo '<script type="text/javascript">'."\n";
         $debugbarRenderer->dumpJsAssets();
-        $js_assets = '<script type="text/javascript">'."\n".ob_get_clean().'</script>'."\n";
+        echo '</script>'."\n";
+        $assets = ob_get_clean();
 
-        return $css_assets.$js_assets.$debugbarRenderer->render();
+        return $assets.$debugbarRenderer->render();
     }
 
     /**
