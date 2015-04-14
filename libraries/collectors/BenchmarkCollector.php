@@ -30,6 +30,7 @@ class BenchmarkCollector extends TimeDataCollector
     public function addBenchmarkMeasure(CI_Benchmark $benchmark)
     {
         $markers = array();
+        $this->requestStartTime = $benchmark->marker['total_execution_time_start'];
 
         foreach ($benchmark->marker as $key => $val) {
             // We match the "end" marker so that the list ends
