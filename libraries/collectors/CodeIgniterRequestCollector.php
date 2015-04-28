@@ -24,6 +24,10 @@ use DebugBar\DataCollector\Renderable;
  */
 class CodeIgniterRequestCollector extends DataCollector implements DataCollectorInterface, Renderable
 {
+    /**
+     *
+     * @var array
+     */
     protected $data = array();
 
     /**
@@ -81,17 +85,25 @@ class CodeIgniterRequestCollector extends DataCollector implements DataCollector
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function collect()
     {
         return $this->data;
     }
     
-
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'request';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getWidgets()
     {
         $widgets = array(

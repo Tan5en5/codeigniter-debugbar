@@ -23,6 +23,9 @@ use DebugBar\DataCollector\Renderable;
  */
 class CodeIgniterCollector extends DataCollector implements Renderable
 {
+    /**
+     * {@inheritdoc}
+     */
     public function collect()
     {
         return array(
@@ -32,11 +35,17 @@ class CodeIgniterCollector extends DataCollector implements Renderable
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'codeigniter';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getWidgets()
     {
         return array(

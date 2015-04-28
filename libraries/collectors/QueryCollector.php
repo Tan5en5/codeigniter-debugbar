@@ -48,6 +48,9 @@ class QueryCollector extends DataCollector implements DataCollectorInterface, Re
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function collect()
     {
         $queries = array();
@@ -73,11 +76,17 @@ class QueryCollector extends DataCollector implements DataCollectorInterface, Re
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'ciquerybuilder';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getWidgets()
     {
         return array(
@@ -94,6 +103,9 @@ class QueryCollector extends DataCollector implements DataCollectorInterface, Re
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getAssets()
     {
         return array(

@@ -28,6 +28,7 @@ use DebugBar\DataCollector\PhpInfoCollector;
 use DebugBar\DataCollector\MemoryCollector;
 use DebugBar\DataCollector\MessagesCollector;
 use DebugBar\DataCollector\ExceptionsCollector;
+use DebugBar\JavascriptRenderer;
 
 class CI_Profiler
 {
@@ -317,27 +318,6 @@ class CI_Profiler
     }
 
     /**
-     * 
-     * @return string
-     */
-    protected function render()
-    {
-        $debugbarRenderer = $this->debugbar->getJavascriptRenderer();
-        $debugbarRenderer->setOptions($this->config);
-
-        ob_start();
-        echo '<style type="text/css">'."\n";
-        $debugbarRenderer->dumpCssAssets();
-        echo '</style>'."\n";
-        echo '<script type="text/javascript">'."\n";
-        $debugbarRenderer->dumpJsAssets();
-        echo '</script>'."\n";
-        $assets = ob_get_clean();
-
-        return $assets.$debugbarRenderer->render();
-    }
-
-    /**
      * Run the Profiler
      *
      * @return string
@@ -359,4 +339,53 @@ class CI_Profiler
         return $this->render();
     }
 
+    /**
+     * 
+     * @return string
+     */
+    protected function render()
+    {
+        $renderer = $this->debugbar->getJavascriptRenderer();
+        $renderer->setOptions($this->config);
+        $is_ajax = $this->CI->input->is_ajax_request();
+        $initialize = (!$is_ajax) ? true : false;
+        $assets = (!$is_ajax) ? $this->getAssets($renderer) : null;
+
+        if ($is_ajax && $this->isJsonOutput()) {
+            $this->debugbar->sendDataInHeaders();
+            return;
+        } else {
+            return $assets.$renderer->render($initialize);
+        }
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    protected function isJsonOutput()
+    {
+        return (stripos($this->CI->output->get_content_type(), 'json') !== false);
+    }
+
+    /**
+     * 
+     * @param JavascriptRenderer $renderer
+     * @return string
+     */
+    protected function getAssets(JavascriptRenderer $renderer)
+    {
+        ob_start();
+        echo '<style type="text/css">'."\n";
+        $renderer->dumpCssAssets();
+        echo 'div.phpdebugbar-header, a.phpdebugbar-restore-btn {'
+        . 'background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAATCAYAAACZZ43PAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIRSURBVHjapJQ9TFRBEMdn7zj5iF8JhpwhxkQxxILgRxAKEkNvuAY7C2oTGxpjtLA1hEISKOwMlHZqLLDRyoSKBo0Up4QQcgXBEAGB2/U3b+cd7+DOxs39d+ftm/nvf2bnnatclOYjJ+erHbKPtdPodfF7kBbXIv8aNwt7csuLTDU/wzFnEFiqBsYNMJ4L0gPkOBKCuvgQYQ632RtjuwAGmilomACB/c7JC8x2cBic+OSEUOdjKZyMHiJ4GqsTHIBtsCSmrjZCY4I7LhbsLPgD8uB33sl6rl7AURE9EV4tL9eYVXaHBRcspt17Kfoo+yHL3foauFotnoILeqLShSBvSGU0IXQyidsa66Dl/hy8SxSoNCpe4uWABSvZL4Jfcvy8PV8Fw3a7yvEMXI81OJRe5I9awWIyIqdRUIRgBnsC/LB6aEramWe4mfGEAKMXzssZAj3xHHsTkBSIWIDyAaHv7VpVwR5TX9pI3VY4PbkVfAar7JdIb8RKv8XymPVDxvdUqqBiVdfgMrfyBOe32IucVU7bGzWKWcxN892KNfCyzPozyTtWdhfSV0Tdx15JestFqfxWefxmfbKQKvhK4Gtrqm37HgLe1eP9DbQ+mvIXn5e5WieGyDZJ4D3WtrTPXaZ9Q0ylxLRBmo+C/Ue4yqWjnoZ1OFeVNsyP2X43gh44rrD1SWuGr3SVERpCkP8ZfwUYAL2WpEUbzbyiAAAAAElFTkSuQmCC") no-repeat scroll 5px 4px #efefef;'
+        . '}';
+        echo '</style>'."\n";
+        echo '<script type="text/javascript">'."\n";
+        $renderer->dumpJsAssets();
+        echo '</script>'."\n";
+
+        return ob_get_clean();
+    }
 }
