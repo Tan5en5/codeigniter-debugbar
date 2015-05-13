@@ -54,20 +54,60 @@ Configuration file is located in `./third_party/codeigniter-debugbar/config/prof
 
 To configure the profiler, read [CodeIgniter's profiler documentation](http://www.codeigniter.com/userguide3/general/profiling.html).
 
-CodeIgniter Debug Bar adds 4 new sections :
+CodeIgniter Debug Bar adds 3 new sections :
 
-- PHP infos : Display information about PHP version.
 - CodeIgniter infos : Display informations about CodeIgniter (version, environment and locale).
 - Messages : Display messages (Console library must be loaded).
 - Exceptions : Display exceptions (Console library must be loaded).
 
 You can configure PHP Debug Bar directly into the profiler configuration file, read [PHP Debug Bar documentation](http://phpdebugbar.com/docs/rendering.html#rendering) for more information.
 
+### Advanced AJAX
+
+By default ajax debug data are send through headers but if you are sending a lot of data it may cause problems with your browser. If you set `open_handler_url` in the configuration file, it will use a storage handler and the open handler to load the data after an ajax request.
+
+Here is an example of an `open_handler_url` setting.
+
+```php
+$config['open_handler_url'] = get_instance()->config->site_url('debug/open_handler');
+```
+
+This code will be in `./controllers/Debug.php`
+
+```php
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+use DebugBar\DebugBar;
+use DebugBar\OpenHandler;
+use DebugBar\Storage\FileStorage;
+
+class Debug extends CI_Controller 
+{
+    public function open_handler()
+    {
+        $this->output->enable_profiler(false);
+        $this->config->load('profiler', true);
+        $path = $this->config->item('cache_path', 'profiler');
+		$cache_path = ($path === '') ? APPPATH.'cache/debugbar/' : $path;
+        $debugbar = new DebugBar();
+        $debugbar->setStorage(new FileStorage($cache_path));
+        $openHandler = new OpenHandler($debugbar);
+        $data = $openHandler->handle(null, false, false);
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output($data);
+    }
+}
+
+```
+
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Anthony Tansens
+Copyright (c) 2014-2015 Anthony Tansens
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

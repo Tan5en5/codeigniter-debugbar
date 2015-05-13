@@ -19,10 +19,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$config['php_info']             = TRUE;
 $config['codeigniter_info']     = TRUE;
-$config['messages']             = TRUE;
 $config['exceptions']           = TRUE;
+$config['messages']             = TRUE;
+$config['php_info']             = TRUE;
 
 /*
 | -------------------------------------------------------------------------
@@ -78,3 +78,15 @@ $config['query_toggle_count']   = 25;
 $config['base_url']                     = NULL;
 $config['include_vendors']              = FALSE;
 $config['enable_jquery_noconflict']     = FALSE;
+$config['open_handler_url']             = NULL; // Example : get_instance()->config->site_url('debug/open_handler');
+
+/*
+|--------------------------------------------------------------------------
+| Cache Directory Path
+|--------------------------------------------------------------------------
+|
+| Leave this BLANK unless you would like to set something other than the default
+| application/cache/debugbar/ directory. Use a full server path with trailing slash.
+|
+*/
+$config['cache_path']                   = '';

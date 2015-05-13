@@ -29,6 +29,7 @@ use DebugBar\DataCollector\MemoryCollector;
 use DebugBar\DataCollector\MessagesCollector;
 use DebugBar\DataCollector\ExceptionsCollector;
 use DebugBar\JavascriptRenderer;
+use DebugBar\Storage\FileStorage;
 
 class CI_Profiler
 {
@@ -352,11 +353,31 @@ class CI_Profiler
         $assets = (!$is_ajax) ? $this->getAssets($renderer) : null;
 
         if ($is_ajax && $this->isJsonOutput()) {
-            $this->debugbar->sendDataInHeaders();
+            $use_open_handler = $this->setStorage();
+            $this->debugbar->sendDataInHeaders($use_open_handler);
             return;
         } else {
             return $assets.$renderer->render($initialize);
         }
+    }
+
+    /**
+     * Set storage for debugbar
+     * 
+     * @return boolean
+     */
+    protected function setStorage()
+    {
+        if (!isset($this->config['open_handler_url'])) {
+            return false;
+        }
+
+        $path = $this->config['cache_path'];
+		$cache_path = ($path === '') ? APPPATH.'cache/debugbar/' : $path;
+        file_exists($cache_path) OR mkdir($cache_path, DIR_WRITE_MODE, true);
+        $this->debugbar->setStorage(new FileStorage($cache_path));
+
+        return true;
     }
 
     /**
@@ -378,8 +399,16 @@ class CI_Profiler
         ob_start();
         echo '<style type="text/css">'."\n";
         $renderer->dumpCssAssets();
-        echo 'div.phpdebugbar-header, a.phpdebugbar-restore-btn {'
-        . 'background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAATCAYAAACZZ43PAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIRSURBVHjapJQ9TFRBEMdn7zj5iF8JhpwhxkQxxILgRxAKEkNvuAY7C2oTGxpjtLA1hEISKOwMlHZqLLDRyoSKBo0Up4QQcgXBEAGB2/U3b+cd7+DOxs39d+ftm/nvf2bnnatclOYjJ+erHbKPtdPodfF7kBbXIv8aNwt7csuLTDU/wzFnEFiqBsYNMJ4L0gPkOBKCuvgQYQ632RtjuwAGmilomACB/c7JC8x2cBic+OSEUOdjKZyMHiJ4GqsTHIBtsCSmrjZCY4I7LhbsLPgD8uB33sl6rl7AURE9EV4tL9eYVXaHBRcspt17Kfoo+yHL3foauFotnoILeqLShSBvSGU0IXQyidsa66Dl/hy8SxSoNCpe4uWABSvZL4Jfcvy8PV8Fw3a7yvEMXI81OJRe5I9awWIyIqdRUIRgBnsC/LB6aEramWe4mfGEAKMXzssZAj3xHHsTkBSIWIDyAaHv7VpVwR5TX9pI3VY4PbkVfAar7JdIb8RKv8XymPVDxvdUqqBiVdfgMrfyBOe32IucVU7bGzWKWcxN892KNfCyzPozyTtWdhfSV0Tdx15JestFqfxWefxmfbKQKvhK4Gtrqm37HgLe1eP9DbQ+mvIXn5e5WieGyDZJ4D3WtrTPXaZ9Q0ylxLRBmo+C/Ue4yqWjnoZ1OFeVNsyP2X43gh44rrD1SWuGr3SVERpCkP8ZfwUYAL2WpEUbzbyiAAAAAElFTkSuQmCC") no-repeat scroll 5px 4px #efefef;'
+        // Change icon to CI icon, based on https://github.com/bcit-ci/ci-design/blob/master/website/assets/images/ci-logo.png
+        echo 'div.phpdebugbar-header, a.phpdebugbar-restore-btn, div.phpdebugbar-openhandler .phpdebugbar-openhandler-header {'
+        . 'background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAATCAYAAACZZ43PAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U'
+        . '29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIRSURBVHjapJQ9TFRBEMdn7zj5iF8JhpwhxkQxxILgRxAKEkNvuAY7C2oTGxpjtLA1hEISKOwMl'
+        . 'HZqLLDRyoSKBo0Up4QQcgXBEAGB2/U3b+cd7+DOxs39d+ftm/nvf2bnnatclOYjJ+erHbKPtdPodfF7kBbXIv8aNwt7csuLTDU/wzFnEFiqBsYNMJ4L0'
+        . 'gPkOBKCuvgQYQ632RtjuwAGmilomACB/c7JC8x2cBic+OSEUOdjKZyMHiJ4GqsTHIBtsCSmrjZCY4I7LhbsLPgD8uB33sl6rl7AURE9EV4tL9eYVXaHB'
+        . 'Rcspt17Kfoo+yHL3foauFotnoILeqLShSBvSGU0IXQyidsa66Dl/hy8SxSoNCpe4uWABSvZL4Jfcvy8PV8Fw3a7yvEMXI81OJRe5I9awWIyIqdRUIRgB'
+        . 'nsC/LB6aEramWe4mfGEAKMXzssZAj3xHHsTkBSIWIDyAaHv7VpVwR5TX9pI3VY4PbkVfAar7JdIb8RKv8XymPVDxvdUqqBiVdfgMrfyBOe32IucVU7bG'
+        . 'zWKWcxN892KNfCyzPozyTtWdhfSV0Tdx15JestFqfxWefxmfbKQKvhK4Gtrqm37HgLe1eP9DbQ+mvIXn5e5WieGyDZJ4D3WtrTPXaZ9Q0ylxLRBmo+C/'
+        . 'Ue4yqWjnoZ1OFeVNsyP2X43gh44rrD1SWuGr3SVERpCkP8ZfwUYAL2WpEUbzbyiAAAAAElFTkSuQmCC") no-repeat scroll 5px 4px #efefef;'
         . '}';
         echo '</style>'."\n";
         echo '<script type="text/javascript">'."\n";
