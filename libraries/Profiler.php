@@ -373,7 +373,7 @@ class CI_Profiler
         }
 
         $path = $this->config['cache_path'];
-		$cache_path = ($path === '') ? APPPATH.'cache/debugbar/' : $path;
+        $cache_path = ($path === '') ? APPPATH.'cache/debugbar/' : $path;
         file_exists($cache_path) OR mkdir($cache_path, DIR_WRITE_MODE, true);
         $this->debugbar->setStorage(new FileStorage($cache_path));
 
