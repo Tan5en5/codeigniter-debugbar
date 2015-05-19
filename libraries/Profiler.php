@@ -52,7 +52,8 @@ class CI_Profiler
         'queries',
         'http_headers',
         'session_data',
-        'config'
+        'config',
+        'included_files',
     );
 
     /**
@@ -316,6 +317,17 @@ class CI_Profiler
         $this->CI->load->library('collectors/SessionCollector', null, 'sessionCollector');
         $this->CI->sessionCollector->setSession($this->CI->session);
         $this->debugbar->addCollector($this->CI->sessionCollector);
+    }
+
+    /**
+     * Compile included files
+     *
+     * @return void
+     */
+    protected function _compile_included_files()
+    {
+        $this->CI->load->library('collectors/IncludedFileCollector', null, 'fileCollector');
+        $this->debugbar->addCollector($this->CI->fileCollector);
     }
 
     /**
