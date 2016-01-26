@@ -1,6 +1,6 @@
 ## Requirements
 
-- PHP 5.3.2+ (Composer requirement)
+- PHP 5.5+ (recommended by CodeIgniter)
 - CodeIgniter 3.0.x
 
 ## Installation
@@ -13,15 +13,15 @@ Create `composer.json` file in your application's root if there is none. Add the
     }
 }
 ```
-Enable Composer (locate in `./config/config.php`) :
+Enable Composer (locate in `application/config/config.php`) :
 ```php
 $config['composer_autoload'] = FCPATH.'vendor/autoload.php';
 ```
-In your application, you will first need to load the newly installed package. This is  done easily through the autoloader, but could also be done in your controller with an environment check for maximum optimization. 
+Enable Debugbar package (locate in `application/config/autoload.php`) :
 ```php
 $autoload['packages'] = array(APPPATH.'third_party/codeigniter-debugbar');
 ```
-If you want to log messages and exceptions you can also load console library
+if you want to log messages and exceptions you can also load console library
 ```php
 $autoload['libraries'] = array('console');
 ```
@@ -40,17 +40,14 @@ $this->output->enable_profiler(true);
 
 To complete the installation, add the following header tags :
 ```html
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/github.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/github.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
 ```
 
-**Important** : If there is a profiler configuration file in your application config directory delete it or CodeIgniter will not load our configuration file.
-
 ## Configuration
-
-Configuration file is located in `./third_party/codeigniter-debugbar/config/profiler.php`.
+Duplicate configuration file located in `application/third_party/codeigniter-debugbar/config/profiler.php` to `application/config/profiler.php`.
 
 To configure the profiler, read [CodeIgniter's profiler documentation](http://www.codeigniter.com/userguide3/general/profiling.html).
 
@@ -107,7 +104,7 @@ class Debug extends CI_Controller
 
 The MIT License (MIT)
 
-Copyright (c) 2014-2015 Anthony Tansens
+Copyright (c) 2014-2016 Anthony Tansens
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
