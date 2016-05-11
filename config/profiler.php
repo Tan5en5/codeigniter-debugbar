@@ -23,6 +23,7 @@ $config['codeigniter_info']     = TRUE;
 $config['exceptions']           = TRUE;
 $config['messages']             = TRUE;
 $config['php_info']             = TRUE;
+$config['included_files']       = TRUE;
 
 /*
 | -------------------------------------------------------------------------

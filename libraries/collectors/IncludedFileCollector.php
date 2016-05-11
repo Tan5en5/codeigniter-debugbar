@@ -31,14 +31,13 @@ class IncludedFileCollector extends DataCollector implements DataCollectorInterf
     {
         $files = array();
         $data = get_included_files();
-        $len = strlen(APPPATH);
 
         foreach ($data as $file_path) {
             // Include only APPPATH
-            if (substr($file_path, 0, $len) === APPPATH && substr($file_path, 0, $len + 11) !== APPPATH.'third_party') {
-                $file = substr($file_path, $len);
+            if (strpos($file_path, APPPATH) !== false && strpos($file_path, APPPATH.'third_party') === false) {
+                $file = str_replace(APPPATH, '', $file_path);
                 $files[] = array(
-                    'message' => "'" . APPPATH . $file . "',",
+                    'message' => "'".$file."',",
                     'is_string' => true,
                 );
             }

@@ -51,11 +51,12 @@ Duplicate configuration file located in `application/third_party/codeigniter-deb
 
 To configure the profiler, read [CodeIgniter's profiler documentation](http://www.codeigniter.com/userguide3/general/profiling.html).
 
-CodeIgniter Debug Bar adds 3 new sections :
+CodeIgniter Debug Bar adds 4 new sections :
 
 - CodeIgniter infos : Display informations about CodeIgniter (version, environment and locale).
 - Messages : Display messages (Console library must be loaded).
 - Exceptions : Display exceptions (Console library must be loaded).
+- Included files : Display included or required files.
 
 You can configure PHP Debug Bar directly into the profiler configuration file, read [PHP Debug Bar documentation](http://phpdebugbar.com/docs/rendering.html#rendering) for more information.
 
@@ -86,7 +87,7 @@ class Debug extends CI_Controller
         $this->output->enable_profiler(false);
         $this->config->load('profiler', true);
         $path = $this->config->item('cache_path', 'profiler');
-		$cache_path = ($path === '') ? APPPATH.'cache/debugbar/' : $path;
+        $cache_path = ($path === '') ? APPPATH.'cache/debugbar/' : $path;
         $debugbar = new DebugBar();
         $debugbar->setStorage(new FileStorage($cache_path));
         $openHandler = new OpenHandler($debugbar);

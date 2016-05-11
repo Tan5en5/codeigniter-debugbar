@@ -61,6 +61,7 @@ class QueryCollector extends DataCollector implements DataCollectorInterface, Re
                 $queries[] = array(
                     'sql' => $val,
                     //'params' => (object) $q['params'],
+                    'connection' => $q->database,
                     'duration' => $q->query_times[$key],
                     'duration_str' => $this->formatDuration($q->query_times[$key])
                 );

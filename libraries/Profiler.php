@@ -162,7 +162,7 @@ class CI_Profiler
      */
     protected function _compile_messages()
     {
-        if ( ! isset($this->CI->console)) {
+        if (!isset($this->CI->console)) {
             return;
         }
 
@@ -181,7 +181,7 @@ class CI_Profiler
      */
     protected function _compile_exceptions()
     {
-        if ( ! isset($this->CI->console)) {
+        if (!isset($this->CI->console)) {
             return;
         }
 
