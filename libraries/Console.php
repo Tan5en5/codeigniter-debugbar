@@ -3,7 +3,7 @@
  * CodeIgniter Debug Bar
  *
  * @package     CodeIgniterDebugBar
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  * @license     http://opensource.org/licenses/MIT MIT
  * @since       Version 1.0
  * @filesource
@@ -21,7 +21,7 @@ use Psr\Log\AbstractLogger;
  * @package     CodeIgniterDebugBar
  * @subpackage  Libraries
  * @category    Libraries
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  */
 class Console extends AbstractLogger
 {

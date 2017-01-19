@@ -3,7 +3,7 @@
  * CodeIgniter Debug Bar
  *
  * @package     CodeIgniterDebugBar
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  * @license     http://opensource.org/licenses/MIT MIT
  * @since       Version 1.0
  * @filesource
@@ -18,7 +18,7 @@ use DebugBar\DataCollector\TimeDataCollector;
  * @package     CodeIgniterDebugBar
  * @subpackage  Libraries
  * @category    Collectors
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  */
 class BenchmarkCollector extends TimeDataCollector
 {

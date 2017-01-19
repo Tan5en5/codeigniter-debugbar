@@ -3,7 +3,7 @@
  * CodeIgniter Debug Bar
  *
  * @package     CodeIgniterDebugBar
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  * @license     http://opensource.org/licenses/MIT MIT
  * @since       Version 1.0
  * @filesource
@@ -91,3 +91,25 @@ $config['open_handler_url']             = NULL; // Example : get_instance()->con
 |
 */
 $config['cache_path']                   = '';
+
+/*
+|--------------------------------------------------------------------------
+| Display Options
+|--------------------------------------------------------------------------
+| This options can be usefull if you want to handle custom output with Debugbar.
+|
+|   display_assets: Whether display content's assets (default: TRUE)
+|   display_javascript: Whether display inline script (default: TRUE)
+|
+| If you set display_assets to false you have to handle assets output manually,
+| for this purpose you can use CI_Profiler::css_assets() and CI_Profiler::js_assets()
+| they behave exactly like there aliases in JavascriptRenderer::dumpJsAssets()
+| and JavascriptRenderer::dumpJsAssets() (see: http://phpdebugbar.com/docs/rendering.html).
+|
+| If you set display_javascript to false you have to handle inline script
+| manually, for this purpose you can use CI_Profiler::inline_script()
+| (IMPORTANT : It display inline script with <script> tags !!).
+|
+*/
+$config['display_assets']               = TRUE;
+$config['display_javascript']           = TRUE;

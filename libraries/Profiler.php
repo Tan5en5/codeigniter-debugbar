@@ -3,7 +3,7 @@
  * CodeIgniter Debug Bar
  *
  * @package     CodeIgniterDebugBar
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  * @license     http://opensource.org/licenses/MIT MIT
  * @since       Version 1.0
  * @filesource
@@ -19,7 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @package     CodeIgniterDebugBar
  * @subpackage  Libraries
  * @category    Libraries
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  */
 
 use DebugBar\DebugBar;
@@ -68,20 +68,28 @@ class CI_Profiler
      *
      * @var object
      */
-    protected $CI;
+    protected static $CI;
 
     /** 
      * Reference to the DebugBar instance
      * 
      * @var DebugBar 
      */
-    protected $debugbar;
+    protected static $debugbar;
 
     /**
+     * Reference to the JavascriptRenderer instance
+     *
+     * @var JavascriptRenderer 
+     */
+    public static $renderer;
+
+    /**
+     * Configuration data
      *
      * @var array 
      */
-    protected $config;
+    protected static $config;
 
     /**
      * Class constructor
@@ -92,19 +100,27 @@ class CI_Profiler
      */
     public function __construct($config = array())
     {
-        $this->debugbar = new DebugBar();
-        $this->config =& $config;
-        $this->CI =& get_instance();
-        $this->CI->load->language('profiler');
+        self::$debugbar = new DebugBar();
+        self::$config =& $config;
+        // Backward compatibility
+        isset(self::$config['display_assets']) OR self::$config['display_assets'] = TRUE;
+        isset(self::$config['display_javascript']) OR self::$config['display_javascript'] = TRUE;
+        self::$CI =& get_instance();
+        self::$CI->load->language('profiler');
+        self::$renderer = self::$debugbar->getJavascriptRenderer();
+        self::$renderer->setOptions(self::$config);
 
         // default all sections to display
-        foreach ($this->_available_sections as $section) {
-            if ( ! isset($config[$section])) {
-                $this->_compile_{$section} = true;
+        foreach ($this->_available_sections as $section)
+        {
+            if ( ! isset($config[$section]))
+            {
+                $this->_compile_{$section} = TRUE;
             }
         }
 
         $this->set_sections($config);
+        log_message('info', 'Profiler Class Initialized');
     }
 
     /**
@@ -117,14 +133,17 @@ class CI_Profiler
      */
     public function set_sections($config)
     {
-        if (isset($config['query_toggle_count'])) {
+        if (isset($config['query_toggle_count']))
+        {
             $this->_query_toggle_count = (int) $config['query_toggle_count'];
             unset($config['query_toggle_count']);
         }
 
-        foreach ($config as $method => $enable) {
-            if (in_array($method, $this->_available_sections)) {
-                $this->_compile_{$method} = ($enable !== false);
+        foreach ($config as $method => $enable)
+        {
+            if (in_array($method, $this->_available_sections))
+            {
+                $this->_compile_{$method} = ($enable !== FALSE);
             }
         }
     }
@@ -136,8 +155,8 @@ class CI_Profiler
      */
     protected function _compile_codeigniter_info()
     {
-        $this->CI->load->library('collectors/CodeIgniterCollector', null, 'codeIgniterCollector');
-        $this->debugbar->addCollector($this->CI->codeIgniterCollector);
+        self::$CI->load->library('collectors/CodeIgniterCollector', NULL, 'codeIgniterCollector');
+        self::$debugbar->addCollector(self::$CI->codeIgniterCollector);
     }
 
     /**
@@ -147,7 +166,7 @@ class CI_Profiler
      */
     protected function _compile_php_info()
     {
-        $this->debugbar->addCollector(new PhpInfoCollector());
+        self::$debugbar->addCollector(new PhpInfoCollector());
     }
 
     /**
@@ -157,15 +176,17 @@ class CI_Profiler
      */
     protected function _compile_messages()
     {
-        if (!isset($this->CI->console)) {
+        if ( ! isset(self::$CI->console))
+        {
             return;
         }
 
-        $this->debugbar->addCollector(new MessagesCollector());
-        $logs = $this->CI->console->getMessages();
+        self::$debugbar->addCollector(new MessagesCollector());
+        $logs = self::$CI->console->getMessages();
 
-        foreach ($logs as $log) {
-            $this->debugbar['messages']->addMessage($log['data'], $log['type']);
+        foreach ($logs as $log)
+        {
+            self::$debugbar['messages']->addMessage($log['data'], $log['type']);
         }
     }
 
@@ -176,15 +197,17 @@ class CI_Profiler
      */
     protected function _compile_exceptions()
     {
-        if (!isset($this->CI->console)) {
+        if ( ! isset(self::$CI->console))
+        {
             return;
         }
 
-        $this->debugbar->addCollector(new ExceptionsCollector());
-        $logs = $this->CI->console->getExeptions();
+        self::$debugbar->addCollector(new ExceptionsCollector());
+        $logs = self::$CI->console->getExeptions();
 
-        foreach ($logs as $log) {
-            $this->debugbar['exceptions']->addException($log['data']);
+        foreach ($logs as $log)
+        {
+            self::$debugbar['exceptions']->addException($log['data']);
         }
     }
 
@@ -200,9 +223,9 @@ class CI_Profiler
      */
     protected function _compile_benchmarks()
     {
-        $this->CI->load->library('collectors/BenchmarkCollector', null, 'benchmarkCollector');
-        $this->CI->benchmarkCollector->addBenchmarkMeasure($this->CI->benchmark);
-        $this->debugbar->addCollector($this->CI->benchmarkCollector);
+        self::$CI->load->library('collectors/BenchmarkCollector', NULL, 'benchmarkCollector');
+        self::$CI->benchmarkCollector->addBenchmarkMeasure(self::$CI->benchmark);
+        self::$debugbar->addCollector(self::$CI->benchmarkCollector);
     }
 
     /**
@@ -212,9 +235,9 @@ class CI_Profiler
      */
     protected function _compile_queries()
     {
-        $this->CI->load->library('collectors/QueryCollector', null, 'queryCollector');
-        $this->CI->queryCollector->setDbs($this->CI);
-        $this->debugbar->addCollector($this->CI->queryCollector);
+        self::$CI->load->library('collectors/QueryCollector', NULL, 'queryCollector');
+        self::$CI->queryCollector->setDbs(self::$CI);
+        self::$debugbar->addCollector(self::$CI->queryCollector);
     }
 
     /**
@@ -224,8 +247,8 @@ class CI_Profiler
      */
     protected function _compile_get()
     {
-        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
-        $this->CI->codeIgniterRequestCollector->setRequestData($this->CI->input, 'get');
+        self::$CI->load->library('collectors/CodeIgniterRequestCollector', NULL, 'codeIgniterRequestCollector');
+        self::$CI->codeIgniterRequestCollector->setRequestData(self::$CI->input, 'get');
     }
 
     /**
@@ -235,8 +258,8 @@ class CI_Profiler
      */
     protected function _compile_post()
     {
-        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
-        $this->CI->codeIgniterRequestCollector->setRequestData($this->CI->input, 'post');
+        self::$CI->load->library('collectors/CodeIgniterRequestCollector', NULL, 'codeIgniterRequestCollector');
+        self::$CI->codeIgniterRequestCollector->setRequestData(self::$CI->input, 'post');
     }
 
     /**
@@ -246,8 +269,8 @@ class CI_Profiler
      */
     protected function _compile_uri_string()
     {
-        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
-        $this->CI->codeIgniterRequestCollector->setAdditionalData($this->CI->lang->line('profiler_uri_string'), $this->CI->uri->uri_string);
+        self::$CI->load->library('collectors/CodeIgniterRequestCollector', NULL, 'codeIgniterRequestCollector');
+        self::$CI->codeIgniterRequestCollector->setAdditionalData(self::$CI->lang->line('profiler_uri_string'), self::$CI->uri->uri_string);
     }
 
     /**
@@ -257,8 +280,8 @@ class CI_Profiler
      */
     protected function _compile_controller_info()
     {
-        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
-        $this->CI->codeIgniterRequestCollector->setAdditionalData($this->CI->lang->line('profiler_controller_info'), $this->CI->router->class.'/'.$this->CI->router->method);
+        self::$CI->load->library('collectors/CodeIgniterRequestCollector', NULL, 'codeIgniterRequestCollector');
+        self::$CI->codeIgniterRequestCollector->setAdditionalData(self::$CI->lang->line('profiler_controller_info'), self::$CI->router->class.'/'.self::$CI->router->method);
     }
 
     /**
@@ -270,7 +293,7 @@ class CI_Profiler
      */
     protected function _compile_memory_usage()
     {
-        $this->debugbar->addCollector(new MemoryCollector());
+        self::$debugbar->addCollector(new MemoryCollector());
     }
 
     /**
@@ -282,8 +305,8 @@ class CI_Profiler
      */
     protected function _compile_http_headers()
     {
-        $this->CI->load->library('collectors/CodeIgniterRequestCollector', null, 'codeIgniterRequestCollector');
-        $this->CI->codeIgniterRequestCollector->setRequestData($this->CI->input, 'server');
+        self::$CI->load->library('collectors/CodeIgniterRequestCollector', NULL, 'codeIgniterRequestCollector');
+        self::$CI->codeIgniterRequestCollector->setRequestData(self::$CI->input, 'server');
     }
 
     /**
@@ -295,7 +318,7 @@ class CI_Profiler
      */
     protected function _compile_config()
     {
-        $this->debugbar->addCollector(new ConfigCollector($this->CI->config->config));
+        self::$debugbar->addCollector(new ConfigCollector(self::$CI->config->config));
     }
 
     /**
@@ -305,13 +328,14 @@ class CI_Profiler
      */
     protected function _compile_session_data()
     {
-        if ( ! isset($this->CI->session)) {
+        if ( ! isset(self::$CI->session))
+        {
             return;
         }
 
-        $this->CI->load->library('collectors/SessionCollector', null, 'sessionCollector');
-        $this->CI->sessionCollector->setSession($this->CI->session);
-        $this->debugbar->addCollector($this->CI->sessionCollector);
+        self::$CI->load->library('collectors/SessionCollector', NULL, 'sessionCollector');
+        self::$CI->sessionCollector->setSession(self::$CI->session);
+        self::$debugbar->addCollector(self::$CI->sessionCollector);
     }
 
     /**
@@ -321,8 +345,8 @@ class CI_Profiler
      */
     protected function _compile_included_files()
     {
-        $this->CI->load->library('collectors/IncludedFileCollector', null, 'fileCollector');
-        $this->debugbar->addCollector($this->CI->fileCollector);
+        self::$CI->load->library('collectors/IncludedFileCollector', NULL, 'fileCollector');
+        self::$debugbar->addCollector(self::$CI->fileCollector);
     }
 
     /**
@@ -332,40 +356,44 @@ class CI_Profiler
      */
     public function run()
     {
-        foreach ($this->_available_sections as $section) {
-            if ($this->_compile_{$section} !== false) {
+        foreach ($this->_available_sections as $section)
+        {
+            if ($this->_compile_{$section} !== FALSE)
+            {
                 $func = '_compile_'.$section;
                 $this->{$func}();
             }
         }
 
         // Add request data collector
-        if (isset($this->CI->codeIgniterRequestCollector)) {
-            $this->debugbar->addCollector($this->CI->codeIgniterRequestCollector);
+        if (isset(self::$CI->codeIgniterRequestCollector))
+        {
+            self::$debugbar->addCollector(self::$CI->codeIgniterRequestCollector);
         }
 
-        return $this->render();
+        return $this->_render();
     }
 
     /**
      * 
      * @return string
      */
-    protected function render()
+    protected function _render()
     {
-        $renderer = $this->debugbar->getJavascriptRenderer();
-        $renderer->setOptions($this->config);
-        $is_ajax = $this->CI->input->is_ajax_request();
-        $initialize = (!$is_ajax) ? true : false;
-        $assets = (!$is_ajax) ? $this->getAssets($renderer) : null;
-
-        if ($is_ajax && $this->isJsonOutput()) {
-            $use_open_handler = $this->setStorage();
-            $this->debugbar->sendDataInHeaders($use_open_handler);
-            return;
-        } else {
-            return $assets.$renderer->render($initialize);
+        if (self::$CI->input->is_ajax_request())
+        {
+            $use_open_handler = $this->_set_storage();
+            self::$debugbar->sendDataInHeaders($use_open_handler);
+            $return = NULL;
         }
+        else
+        {
+            $assets        = (bool) self::$config['display_assets'] ? $this->_get_assets() : NULL;
+            $inline_script = (bool) self::$config['display_javascript'] ? self::inline_script() : NULL;
+            $return        = $assets.$inline_script;
+        }
+
+        return $return;
     }
 
     /**
@@ -373,39 +401,61 @@ class CI_Profiler
      * 
      * @return boolean
      */
-    protected function setStorage()
+    protected function _set_storage()
     {
-        if (!isset($this->config['open_handler_url'])) {
-            return false;
+        if ( ! isset(self::$config['open_handler_url']))
+        {
+            return FALSE;
         }
 
-        $path = $this->config['cache_path'];
+        $path       = self::$config['cache_path'];
         $cache_path = ($path === '') ? APPPATH.'cache/debugbar/' : $path;
-        file_exists($cache_path) OR mkdir($cache_path, DIR_WRITE_MODE, true);
-        $this->debugbar->setStorage(new FileStorage($cache_path));
+        file_exists($cache_path) OR mkdir($cache_path, DIR_WRITE_MODE, TRUE);
+        self::$debugbar->setStorage(new FileStorage($cache_path));
 
-        return true;
+        return TRUE;
     }
 
     /**
+     * Return all CSS/JS assets
      * 
-     * @return boolean
-     */
-    protected function isJsonOutput()
-    {
-        return (stripos($this->CI->output->get_content_type(), 'json') !== false);
-    }
-
-    /**
-     * 
-     * @param JavascriptRenderer $renderer
      * @return string
      */
-    protected function getAssets(JavascriptRenderer $renderer)
+    protected function _get_assets()
     {
         ob_start();
+
         echo '<style type="text/css">'."\n";
-        $renderer->dumpCssAssets();
+        echo self::css_assets();
+        echo '</style>'."\n";
+        echo '<script type="text/javascript">'."\n";
+        echo self::js_assets();
+        echo '</script>'."\n";
+
+        return ob_get_clean();
+    }
+
+    /**
+     * Return inline script generated by DebugBar
+     * 
+     * @return string
+     */
+    public static function inline_script()
+    {
+        return self::$renderer->render( ! self::$CI->input->is_ajax_request());
+    }
+
+    /**
+     * Return all CSS assets or write in a file
+     * 
+     * @param string $targetFilename
+     * @return mixed
+     */
+    public static function css_assets($targetFilename = NULL)
+    {
+        ob_start();
+
+        self::$renderer->dumpCssAssets();
         // Change icon to CI icon, based on https://github.com/bcit-ci/ci-design/blob/master/website/assets/images/ci-logo.png
         echo 'div.phpdebugbar-header, a.phpdebugbar-restore-btn, div.phpdebugbar-openhandler .phpdebugbar-openhandler-header {'
         . 'background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAATCAYAAACZZ43PAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U'
@@ -418,11 +468,38 @@ class CI_Profiler
         . 'Ue4yqWjnoZ1OFeVNsyP2X43gh44rrD1SWuGr3SVERpCkP8ZfwUYAL2WpEUbzbyiAAAAAElFTkSuQmCC") no-repeat scroll 5px 4px #efefef;'
         . '}'
         . '.phpdebugbar-widgets-value.phpdebugbar-widgets-warning { color: #f39c12; }';
-        echo '</style>'."\n";
-        echo '<script type="text/javascript">'."\n";
-        $renderer->dumpJsAssets();
-        echo '</script>'."\n";
+        $content = str_replace(['PhpDebugbarFontAwesome', 'phpdebugbar-fa-', '.phpdebugbar-fa'], ['FontAwesome', 'fa-', '.fa'], ob_get_clean());
 
-        return str_replace(['PhpDebugbarFontAwesome', 'phpdebugbar-fa'], ['FontAwesome', 'fa'], ob_get_clean());
+        if ($targetFilename !== NULL)
+        {
+            return file_put_contents($targetFilename, $content);
+        }
+        else
+        {
+            return $content;
+        }
+    }
+
+    /**
+     * Return all JS assets or write in a file
+     * 
+     * @param string $targetFilename
+     * @return mixed
+     */
+    public static function js_assets($targetFilename = NULL)
+    {
+        ob_start();
+
+        self::$renderer->dumpJsAssets();
+        $content = str_replace('phpdebugbar-fa', 'fa', ob_get_clean());
+
+        if ($targetFilename !== NULL)
+        {
+            return file_put_contents($targetFilename, $content);
+        }
+        else
+        {
+            return $content;
+        }
     }
 }

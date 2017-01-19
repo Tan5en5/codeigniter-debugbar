@@ -3,7 +3,7 @@
  * CodeIgniter Debug Bar
  *
  * @package     CodeIgniterDebugBar
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  * @license     http://opensource.org/licenses/MIT MIT
  * @since       Version 1.0
  * @filesource
@@ -20,7 +20,7 @@ use DebugBar\DataCollector\Renderable;
  * @package     CodeIgniterDebugBar
  * @subpackage  Libraries
  * @category    Collectors
- * @author      Anthony Tansens <atansens@gac-technology.com>
+ * @author      Anthony Tansens <a.tansens+github@gmail.com>
  */
 class IncludedFileCollector extends DataCollector implements DataCollectorInterface, Renderable
 {
